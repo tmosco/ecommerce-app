@@ -1,6 +1,6 @@
 import styles from "./register.module.css";
 import FormHeader from "../../components/FormHeader";
-import {useState} from "react";
+
 import {useForm} from "react-hook-form"
 
 
@@ -13,18 +13,17 @@ type FormValues ={
 function RegistrationPage() {
 
 
-
-
-    const {register, handleSubmit, formState:{errors},reset} = useForm<FormValues>();
+   const {register, handleSubmit, formState:{errors},reset} = useForm<FormValues>();
     const onSubmit = (data) => {
-fetch('/api/v1/user',{
+fetch('/api/auth/signup',{
   method:'POST',
   body:JSON.stringify(data),
   headers:{
     'Content-Type':'application/json'
   }
 
-}).then(response => response.json()
+})
+.then(response => response.json()
 .then(data=>console.log(data)));
 reset();
 

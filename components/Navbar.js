@@ -1,11 +1,18 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styles from "../styles/Navbar.module.css";
+import {useSession, signOut, signout} from 'next-auth/client';
 
 
 
 function Navbar() {
+  const [session, loading] = useSession();
   const router = useRouter();
+
+  function logoutHandler(){
+signout();
+  }
+
   return (
     <>
 <nav className={`navbar navbar-expand-lg navbar-dark bg-dark `}>
@@ -19,16 +26,18 @@ function Navbar() {
               </a>
             </Link>
           </li>
+          {session && 
           <li className="nav-item">
-            <Link href="/homepage">
+            <Link href="/userpage">
               <a
-                className={router.pathname == "/homepage" ? "active nav-link" : "nav-link"}>
+                className={router.pathname == "/userpage" ? "active nav-link" : "nav-link"}>
                 HomePage
               </a>
             </Link>
           </li>
+                }
           
-            
+            {!session && !loading? <>
               <li className='nav-item"'>
                 <Link href="/login">
                   <a
@@ -46,19 +55,16 @@ function Navbar() {
                   </a>
                 </Link>
               </li>
+              </>
        
-
-              <li className="nav-item">
+       :
+       <li className="nav-item">
                 <div
-                  onClick={() =>
-                    logout(() => {
-                      router.push("/");
-                    })
-                  }
-                >
+                  onClick={logoutHandler} >
                   <a className={`${styles.logout} nav-link`}>Logout</a>
                 </div>
               </li>
+              }
 
         </ul>
       </div>
