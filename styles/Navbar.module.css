@@ -1,0 +1,26 @@
+li.active {
+  border-bottom-color: red;
+}
+
+.nav {
+  text-transform: capitalize;
+}
+
+.logout {
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.logout:hover {
+  color: black;
+  background-color: red;
+}
+
+a.nav-link{
+    color:red !important
+}
+
+
+.color{
+    background-color: red
+};
