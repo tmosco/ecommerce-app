@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { hash, genSaltSync } from "bcryptjs";
-import { MongoClient } from "mongodb";
+import {connectMongoDb, closeDb} from "../../../utils/db"
 
 async function handler(req, res) {
   if (req.method === "POST") {
@@ -15,17 +15,7 @@ async function handler(req, res) {
     }
 
     //Connect to database;
-    let client;
-    try {
-      client = await MongoClient.connect(`${process.env.MONGODB_URI}`);
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "could not connect to database",
-      });
-      return;
-    }
-    const db = client.db();
+    const db =await connectMongoDb(req,res);
 
     // check existing
     const checkExisting = await db
@@ -57,7 +47,7 @@ async function handler(req, res) {
 
       newUser.id = result.insertedId;
     } catch (error) {
-      client.close();
+      closeDb()
       res.status(500).json({
         success: false,
         message: "Storing data failed",
@@ -71,10 +61,10 @@ async function handler(req, res) {
     });
 
     //   close DB connection
-    client.close();
+closeDb();
 
     // // cosole.log(name,email,password)
-    // const filePath = path.join(process.cwd(), "data", "user.json");
+    // onst filePath = path.join(process.cwd(), "data", "user.json");
     // const fileData = fs.readFileSync(filePath);
     // const data = JSON.parse(fileData);
     // data.push(newUser);

@@ -1,17 +1,22 @@
 import { MongoClient } from "mongodb";
 
-const client = MongoClient.connect(``)
+export async function connectMongoDb(req, res) {
+  let client;
+  try {
+    client = await MongoClient.connect(`${process.env.MONGODB_URI}`);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "could not connect to database",
+    });
+    return error;
+  }
+  const db = client.db();
 
+  return db;
+}
 
-
-let client;
-    try {
-        client = await MongoClient.connect(`${orocess.env.MONGODB_URI}`);
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "could not connect to database",
-      });
-      return;
-    }
-    const db =client.db();
+export async function closeDb() {
+  const client = await MongoClient.connect(`${process.env.MONGODB_URI}`);
+  return client.close();
+}
