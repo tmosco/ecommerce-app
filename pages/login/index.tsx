@@ -1,8 +1,9 @@
 import styles from "./login.module.css";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import FormHeader from "../../components/FormHeader";
 import {useForm} from "react-hook-form";
-import {signIn}from 'next-auth/client';
+import {signIn,getSession}from 'next-auth/client';
+import {useRouter} from 'next/router';
 
 
 
@@ -12,9 +13,29 @@ type FormValues ={
 };
 
 function LoginPage() {
+  const [isLoading, setIsLoading]= useState(true);
+  const router = useRouter()
   const [error, setError] = useState("");
-  const [isLogin, setIsLogin] = useState(false);
-const {register, handleSubmit, formState:{errors},reset} = useForm<FormValues>();
+
+
+useEffect(()=>{
+getSession().then((session)=>{
+  if (session){
+    router.replace('/');
+      }
+      else{
+        setIsLoading(false);
+      }
+})
+},[router]);
+
+
+
+
+
+
+
+const {register, handleSubmit, formState:{errors}} = useForm<FormValues>();
    const onSubmit = (data) => {
   signIn('credentials',{
   redirect:false,
@@ -24,10 +45,13 @@ const {register, handleSubmit, formState:{errors},reset} = useForm<FormValues>()
 
 })
 .then(data=>{
+  console.log(data)
   if (data.error){
     setError(data.error);
   }else{
-    setIsLogin(true);
+    router.replace('/userpage');
+    console.log(data)
+
   }
 })
   
@@ -35,29 +59,33 @@ const {register, handleSubmit, formState:{errors},reset} = useForm<FormValues>()
     };
 
     return (
+      
         <>  
+        {!isLoading ? <>
          <FormHeader title="Login" description="Login to Super-C pharmacy and store "/>
-         <div className={`container col-md-8 offset-md-2 ${styles.header}`}>
+          <div className={`container col-md-8 offset-md-2 ${styles.header}`}>
              
- {error && <p className="formalert" >{error}</p>}
-         <form onSubmit ={handleSubmit(onSubmit)}className="justify-content-center">
-
-         <div className="mb-3">
-           <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-           <input {...register("email", {required:true})} type="email" className="form-control" />
-           {errors.email && <p className="formalert" >Please enter a valid Email</p>}
-           
-         
-         </div>
-         <div className="mb-3">
-           <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-           <input {...register("password",{required:true})} type="password" className="form-control"  />
-           {errors.password && <p className="formalert" >Please enter Password</p>}
-         </div>
-        
-         <button type="submit" className="btn btn-primary">Submit</button>
-       </form>
-         </div>
+             {error && <p className="formalert" >{error}</p>}
+                     <form onSubmit ={handleSubmit(onSubmit)}className="justify-content-center">
+            
+                     <div className="mb-3">
+                       <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+                       <input {...register("email", {required:true})} type="email" className="form-control" />
+                       {errors.email && <p className="formalert" >Please enter a valid Email</p>}
+                       
+                     
+                     </div>
+                     <div className="mb-3">
+                       <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                       <input {...register("password",{required:true})} type="password" className="form-control"  />
+                       {errors.password && <p className="formalert" >Please enter Password</p>}
+                     </div>
+                    
+                     <button type="submit" className="btn btn-primary">Submit</button>
+                   </form>
+                     </div>
+        </>: <p>Loading</p>}
+ 
  
          </>
     )

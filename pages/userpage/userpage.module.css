@@ -1,0 +1,6 @@
+.userBody{
+    margin: 2rem;
+}
+.userBody > ul{
+    font-size: 20px;
+}

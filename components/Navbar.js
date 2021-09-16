@@ -31,7 +31,7 @@ signout();
             <Link href="/userpage">
               <a
                 className={router.pathname == "/userpage" ? "active nav-link" : "nav-link"}>
-                HomePage
+                DashBoard
               </a>
             </Link>
           </li>

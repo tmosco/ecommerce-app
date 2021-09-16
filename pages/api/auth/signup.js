@@ -37,9 +37,12 @@ async function handler(req, res) {
     //Create new user
 
     const newUser = {
+      createdAt:Date.now,
       name,
       email,
       hash_password,
+      role:0,
+      history:[]
     };
 
     try {
