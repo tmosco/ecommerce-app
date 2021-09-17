@@ -10,10 +10,6 @@ import { useState } from 'react';
 function Navbar() {
 
   const [session, loading] = useSession();
-  console.log(session);
-  
-
-
 
   const router = useRouter();
 

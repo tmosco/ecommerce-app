@@ -22,6 +22,9 @@ async function handler(req, res) {
       .collection("users")
       .findOne({ email: email });
 
+      console.log(checkExisting);
+
+
     //send error if duplicate is found
     if (checkExisting) {
       res.status(422).json({
@@ -37,7 +40,7 @@ async function handler(req, res) {
     //Create new user
 
     const newUser = {
-      createdAt:Date.now,
+      createdAt:Date.now(),
       name,
       email,
       hash_password,

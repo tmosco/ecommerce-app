@@ -1,0 +1,93 @@
+import { useSession, getSession } from "next-auth/client";
+import { useState, useEffect } from "react";
+import Header from "../../components/Header";
+
+function category() {
+  // const [session] =useSession();
+  // const{_id,email,role,history}= session.user;
+  const [user, setUser] = useState({});
+  // console.log(user);
+
+  useEffect(() => {
+    const securePage = async () => {
+      const session = await getSession();
+      if (session) {
+        setUser(session.user);
+      }
+    };
+    securePage();
+  }, []);
+
+  const [name, setName] = useState("");
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
+
+  const data = {
+    id: user._id,
+    email: user.email,
+    name: name,
+    role: user.role,
+  };
+
+  const handleChange = (e) => {
+    setError();
+    setName(e.target.value);
+  };
+
+  const clickSubmit = (e) => {
+    e.preventDefault();
+    setSuccess(false);
+    fetch("/api/category", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data.message);
+        setError(data.message);
+      })
+      .catch((err) => setError(err));
+  };
+
+  // const handleSubmit = event => {
+  //     event.preventDefault();
+  //    setemial(name)
+  //   };
+
+  const CategoryForm = () => (
+    <form onSubmit={clickSubmit}>
+      <div className="form-group mb-3">
+        <label htmlFor="name" className="text-muted">
+          Add Category
+        </label>
+        <input
+          type="text"
+          name="name"
+          className="form-control"
+          onChange={handleChange}
+          value={name}
+          autoFocus
+        />
+      </div>
+      <button className="btn btn-outline-primary">Create Categoty</button>
+    </form>
+  );
+
+  return (
+    <>
+      <Header className="container-fluid" title="Add New Category" />
+      {error.length >0 && <p>{error}</p>}
+      <div className="m-5">
+        <div className="row">
+          <div className="col-md-8 offset-md-2">{CategoryForm()}</div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default category;

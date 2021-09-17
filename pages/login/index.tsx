@@ -45,12 +45,10 @@ const {register, handleSubmit, formState:{errors}} = useForm<FormValues>();
 
 })
 .then(data=>{
-  console.log(data)
   if (data.error){
     setError(data.error);
   }else{
     router.replace('/');
-    console.log(data)
 
   }
 })
