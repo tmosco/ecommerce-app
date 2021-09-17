@@ -1,9 +1,9 @@
 import styles from "../styles/Header.module.css"
-function Header() {
+function Header({title, description="", children}) {
     return (
         <div className={`container-fluid bg-light  ${styles.header}`}>
-        <h2 className="display-4"></h2>
-        <p className="lead"></p>
+        <h2 className="display-4">{title}</h2>
+        <div className={styles.description}>{description}</div>
       </div>
     )
 }

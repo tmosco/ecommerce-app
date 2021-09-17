@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Provider session={pageProps.session}> 
+      <Provider session={pageProps.session}>
         <Layout>
           <Component {...pageProps} />
         </Layout>
@@ -22,5 +22,3 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
-
-

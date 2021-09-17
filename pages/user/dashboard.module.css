@@ -1,0 +1,14 @@
+/* .userBody{
+    margin: 2rem;
+} */
+.userBody > ul{
+    font-size: 20px;
+}
+
+.infoBody{
+    margin: 3rem;
+}
+
+.link > li  > a{
+    color:rgb(13, 142, 235)
+}

@@ -1,12 +1,20 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styles from "../styles/Navbar.module.css";
-import {useSession, signOut, signout} from 'next-auth/client';
+import {useSession, signout} from 'next-auth/client';
+import { useState } from 'react';
+
 
 
 
 function Navbar() {
+
   const [session, loading] = useSession();
+  console.log(session);
+  
+
+
+
   const router = useRouter();
 
   function logoutHandler(){
@@ -28,9 +36,9 @@ signout();
           </li>
           {session && 
           <li className="nav-item">
-            <Link href="/userpage">
+            <Link href="/user/dashboard">
               <a
-                className={router.pathname == "/userpage" ? "active nav-link" : "nav-link"}>
+                className={router.pathname == "/user/dashboard" ? "active nav-link" : "nav-link"}>
                 DashBoard
               </a>
             </Link>
@@ -72,5 +80,21 @@ signout();
     </>
   );
 }
+
+// export async function getServerSideProps(context) {
+//   const session = await getSession({ req: context.req });
+
+//   if (!session) {
+//     return {
+//       redirect: {
+//         destination: "/login",
+//         permanent: true,
+//       }, 
+//     };
+//   }
+//   return {
+//     props: { session },
+//   };
+// }
 
 export default Navbar;

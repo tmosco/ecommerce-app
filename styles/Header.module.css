@@ -1,8 +1,9 @@
-.header{
-    background-color: rgb(156 161 39 / 25%) !important;
-    /* background-image: url('../public/images/pics-1.jpg'); */
-    
-    padding:5rem;
+.header {
+  background-color: rgb(156 161 39 / 25%) !important;
 
-    
+  padding: 5rem;
+}
+
+.description {
+  font-size: 22px;
 }

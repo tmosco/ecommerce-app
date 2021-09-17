@@ -49,7 +49,7 @@ const {register, handleSubmit, formState:{errors}} = useForm<FormValues>();
   if (data.error){
     setError(data.error);
   }else{
-    router.replace('/userpage');
+    router.replace('/');
     console.log(data)
 
   }
