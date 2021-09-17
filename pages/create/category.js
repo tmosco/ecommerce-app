@@ -3,6 +3,7 @@ import FormHeader from "../../components/FormHeader";
 import { getSession } from "next-auth/client";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 function Category() {
   const [user, setUser] = useState();
@@ -53,12 +54,18 @@ function Category() {
     }
   };
 
-  //     const handleChange =(name) =>(e)=>{
-  //         setValues({...values,[name]: e.target.value})
-  // };
+  const goBack = () => (
+    <div className="mt-5">
+      <Link href="/admin/dashboard">
+        <a>Go Back to Dashboard</a>
+      </Link>
+    </div>
+  );
+
   return (
     <>
       <FormHeader title="Add new Category" />
+      {goBack()}
       <div className={`container col-md-8 offset-md-2 ${styles.header}`}>
         {error && <p className="formalert">{error}</p>}
         <form
