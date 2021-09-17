@@ -15,7 +15,8 @@ async function handler(req, res) {
     //send error if duplicate is found
     if (checkExisting) {
       res.status(422).json({
-        error: "Product already exists",
+        success: false,
+        message: "Product already exists",
       });
       // throw new Error("Category already exists");
       return;
@@ -24,7 +25,8 @@ async function handler(req, res) {
     // if not admin
     if (role !== 1) {
       res.status(401).json({
-        error: "Not authorize to access this page",
+        success: false,
+        message: "Not authorize to access this page",
       });
       return;
     }
@@ -33,12 +35,12 @@ async function handler(req, res) {
 
     const newProduct = {
       createdAt: Date.now(),
-      User_id:id,
+      User_id: id,
       name: data.name,
       description: data.description,
       price: data.price,
       quantity: data.quantity,
-      sold:0,
+      sold: 0,
       category: data.categories,
       delivery: data.delivery,
     };
@@ -50,20 +52,21 @@ async function handler(req, res) {
       closeDb();
       res.status(500).json({
         success: false,
-        error: "Cannot save to database",
+        message: "Cannot save to database",
       });
       return;
     }
 
     // Send Success response
     res.status(201).json({
+      success: true,
       message: "Product Created",
     });
 
     //   close DB connection
     closeDb();
   } else {
-    res.status(500).json({ error: "Invalid Route" });
+    res.status(500).json({ success: false, message: "Invalid Route" });
   }
 }
 

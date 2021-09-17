@@ -14,9 +14,8 @@ getCategory();
 
 
 const [categories, setCategories] = useState([])
-const [error, setError] = useState("");
-const [success, setSucces] = useState("");
-const [formData, setFormData] = useState({});
+const [response, setResponse] = useState({});
+
 
 
 
@@ -49,7 +48,6 @@ const [formData, setFormData] = useState({});
       role: user.role,
       data: data,
     };
-    setFormData(data);
     fetch("/api/product", {
       method: "POST",
       body: JSON.stringify(newData),
@@ -59,8 +57,15 @@ const [formData, setFormData] = useState({});
     })
       .then((response) => response.json())
       .then((data) => {
-        setSucces(data.message);
-        setError(data.error);
+        if (data) {
+          if (data.success === false) {
+            setError(true);
+          } else if (response.success === true) {
+            setSuccess(true)
+          } else {
+            console.log("none");
+          }
+        }
       });
     reset();
   };
@@ -76,15 +81,13 @@ const [formData, setFormData] = useState({});
   return (
     <>
       <ProductForm
-        success={success}
-        error={error}
         onSubmit={onSubmit}
         handleChange={handleChange}
         register={register}
         handleSubmit={handleSubmit}
         errors={errors}
         categories={categories}
-        formData={formData}
+        response={response}
       />
     </>
   );

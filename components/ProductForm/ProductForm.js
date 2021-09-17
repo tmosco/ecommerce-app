@@ -1,19 +1,37 @@
 import FormHeader from "../FormHeader";
+import { useState } from 'react';
+
 
 import Link from "next/link";
 
 function ProductForm({
-  success,
-  error,
   handleChange,
   onSubmit,
   register,
   handleSubmit,
   errors,
   categories,
-  formData,
-  formName,
+  response,
 }) {
+const [error, setError] = useState(false);
+const [success, setSuccess] = useState(false);
+
+console.log("error",error);
+console.log("success",success);
+
+
+  const checkError = (response) => {
+    if (response) {
+      if (response.success === false) {
+        setError(true);
+      } else if (response.success === true) {
+        setSuccess(true)
+      } else {
+        console.log("none");
+      }
+    }
+  };
+checkError(response);
   const newPhotoForm = () => (
     <form action="" className="mb-3">
       <h4>Photo</h4>
@@ -35,12 +53,12 @@ function ProductForm({
 
   const showSuccess = () => (
     <div className="alert alert-info">
-      <h2>{formData.name} Created !</h2>
+      <h2>Product Created</h2> !
     </div>
   );
 
-  const showError = (error) => (
-    <div className="alert alert-danger">{error}</div>
+  const showError = (response) => (
+    <div className="alert alert-danger">{response.message}</div>
   );
   return (
     <>
@@ -48,7 +66,9 @@ function ProductForm({
       {goBack()}
       <div className={`container col-md-8 offset-md-2 `}>
         {success && showSuccess()}
-        {error && showError(error)}
+        {error &&  showError(response)} 
+
+
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="justify-content-center"
