@@ -14,6 +14,7 @@ function Navbar() {
   const router = useRouter();
 
   function logoutHandler(){
+    router.push('/login')
 signout();
   }
 

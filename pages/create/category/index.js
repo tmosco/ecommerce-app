@@ -1,5 +1,5 @@
 import styles from "./category.module.css";
-import FormHeader from "../../components/FormHeader";
+import FormHeader from "../../../components/FormHeader";
 import { getSession } from "next-auth/client";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import Link from "next/link";
 function Category() {
   const [user, setUser] = useState();
   const [error, setError] = useState("");
+  const [success, setSucces] = useState("");
 
   useEffect(() => {
     const securePage = async () => {
@@ -42,7 +43,8 @@ function Category() {
       .then((response) => response.json())
       .then((data) => {
         // console.log(data.message);
-        setError(data.message);
+        setSucces(data.message);
+        setError(data.error);
       })
       .catch((err) => setError(err));
   };
@@ -62,12 +64,19 @@ function Category() {
     </div>
   );
 
+  const showSuccess = () => (
+    <div className="alert alert-info">Category Created</div>
+  );
+
+  const showError = (error) => <div className="alert alert-danger">{error}</div>;
+
   return (
     <>
       <FormHeader title="Add new Category" />
       {goBack()}
       <div className={`container col-md-8 offset-md-2 ${styles.header}`}>
-        {error && <p className="formalert">{error}</p>}
+        {success && showSuccess()}
+        {error && showError(error)}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="justify-content-center"
