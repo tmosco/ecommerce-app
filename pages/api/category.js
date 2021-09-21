@@ -1,37 +1,107 @@
-import initDB from "../../helpers/initDB";
-import Category from "../../models/Category";
+import { connectMongoDb, closeDb } from "../../utils/db";
 
-
-initDB();
-
-export default async function handler(req, res) {
-  if (req.method === "GET") {
-    const category = await Category.find({});
-    res.status(200).json({ success: true, data: category });
-  }
+async function handler(req, res) {
   if (req.method === "POST") {
-    const { id, role, data } = req.body;
+    // const { name } = req.body;
+    const { email, role ,name} = req.body;
+  
+    //Format the name
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+      const categoryName = capitalizeFirstLetter(name);
 
-    const newProduct = {
-        createdAt: Date.now(),
-        User_id: id,
-        name: data.name,
-        description: data.description,
-        price: data.price,
-        quantity: data.quantity,
-        sold: 0,
-        category: data.categories,
-        delivery: data.delivery,
+    //Connect to database;
+    const db = await connectMongoDb(req, res);
 
-      };
 
-    const product = await Product.create(newProduct);
+
+    // check existing
+    const checkExisting = await db.collection("category").findOne({ categoryName: categoryName });
+
+       //send error if duplicate is found
+       if (checkExisting) {
+        res.status(422).json({
+          error: "Category already exists",
+        });
+        return;
+      }
+
+
+      
+    // send error if duplicate is found
+    if ( role !== 1) {
+      res.status(401).json({
+        error: "Not authorize to access this page",
+      });
+      return;
+    }
+
+    //Create new Category
+    const newCategory = {
+      createdAt: Date.now(),
+      categoryName
+    };
+
+    try {
+      const result = await db.collection("category").insertOne(newCategory);
+      newCategory.id = result.insertedId;
+    } catch (error) {
+      closeDb();
+      res.status(500).json({
+        success: false,
+        error: "Storing data failed",
+      });
+      return;
+    }
+    //Send success response
+
     res.status(201).json({
-      success: true,
-      data: product,
+      message: "Category Created",
     });
+
+    //   close DB connection
+    closeDb();
+  } else if(req.method === "GET")
+  {
+    //Connect to database;
+    const db = await connectMongoDb(req, res);
+
+    //Get category
+
+    try {
+        const result = await db
+        .collection("category")
+        .find({})
+        .toArray();
+    
+        res.status(200).json({
+            success:true,
+            message:"Success",
+            result
+        })
+    
+   
+        
+    } catch (error) {
+        closeDb();
+        res.status(500).json({
+            success: false,
+            error: "Storing data failed",
+        });
+        return;
+    }
+
+  }
+  
+  
+  
+  
+  
+  
+  else {
+    res.status(500).json({ message: "Invalid Route" });
   }
 }
 
-
-
+export default handler;
