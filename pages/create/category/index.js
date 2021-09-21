@@ -29,7 +29,7 @@ function Category() {
 
   const onSubmit = (data) => {
     const newData = {
-      email: user.email,
+      // email: user.email,
       role: user.role,
       name: data.name.toLowerCase(),
     };
@@ -42,7 +42,7 @@ function Category() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data.message);
+        console.log(data);
         setSuccess(data.message);
         setError(data.error);
       })

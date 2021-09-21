@@ -1,5 +1,6 @@
 import { connectMongoDb, closeDb } from "../../utils/db";
 
+
 async function handler(req, res) {
   if (req.method === "POST") {
     // const { name } = req.body;
