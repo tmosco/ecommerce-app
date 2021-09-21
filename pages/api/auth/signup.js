@@ -1,6 +1,4 @@
 import User from "../../../models/User";
-import { hash, genSaltSync } from "bcryptjs";
-import {connectMongoDb, closeDb} from "../../../utils/db";
 import initDB from "../../../helpers/initDB"
 
 

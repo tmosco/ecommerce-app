@@ -1,8 +1,6 @@
 import initDB from "../../helpers/initDB";
 import Category from "../../models/Category";
 import errorHandler from "../../utils/errorHanlder";
-import ErrorHanlder from "../../utils/errorHanlder"
-
 
 
 

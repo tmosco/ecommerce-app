@@ -1,7 +1,5 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
-import { MongoClient } from "mongodb";
-import { Mongoose } from "mongoose";
 import { compare } from "bcryptjs";
 import initDB from "../../../helpers/initDB";
 import User from "../../../models/User";
