@@ -45,7 +45,6 @@ export default async function handler(req, res) {
       });
     } catch (error) {
       errorHandler(res,req,error.code)
-      // res.status(400).json({ success: false , error:errorHandler(error.code)});
       return
     }
   }

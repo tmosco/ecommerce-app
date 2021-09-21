@@ -33,9 +33,9 @@ const UserSchema = new mongoose.Schema({
         trim: true,
     },
     role: {
-        type: String,
-        enum:['admin','seller','user'],
-        default: 'user'
+        type: Number,
+        enum:[0,1],
+        default: 0
     },
     history: {
         type: Array,
@@ -49,15 +49,15 @@ const UserSchema = new mongoose.Schema({
 });
 
 
-// // Encrypt password using bcrypt
-// UserSchema.pre('save', async function(next){
+// Encrypt password using bcrypt
+UserSchema.pre('save', async function(next){
     
-//     if(!this.isModified('password')){
-//         next();
-//     }
-//     const salt = await bcrypt.genSaltSync(10);
-//     this.password = await bcrypt.hash(this.password, salt);
-// });
+    if(!this.isModified('password')){
+        next();
+    }
+    const salt = await bcrypt.genSaltSync(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
 
 // //Sign jwt and return
 // UserSchema.methods.getSignedJwtToken = function(){
@@ -66,7 +66,7 @@ const UserSchema = new mongoose.Schema({
 //     });
 // }
 
-// //Match user entered password to hashed password in database
+//Match user entered password to hashed password in database
 // UserSchema.methods.matchPassword = async function(enteredPassword){
 //     return await bcrypt.compare(enteredPassword, this.password);
 // }
@@ -86,4 +86,6 @@ const UserSchema = new mongoose.Schema({
 // }
 
 
-export default mongoose.models.user || mongoose.model('User', UserSchema)
+global.User= global.User || mongoose.model('User', UserSchema);
+
+export default global.User;

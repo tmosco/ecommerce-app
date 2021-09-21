@@ -32,15 +32,14 @@ const options = {
         const user = await User.findOne({ email: credentials.email }).select(
           "+password"
         );
+        console.log(user);
+
         if (!user) {
           throw new Error("Invalid credential", 401);
         }
 
-        const checkPassword = await compare(
-          credentials.password,
-          user.password
-        );
-
+        const checkPassword = await compare(credentials.password,result.hash_password  );
+   
         //Incorrect password - send response
         if (!checkPassword) {
           // client.close();
@@ -54,7 +53,7 @@ const options = {
         }
 
         // else send success response
-
+        // client.close();
         return user;
       },
     }),
