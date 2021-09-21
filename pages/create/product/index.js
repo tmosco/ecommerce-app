@@ -1,28 +1,20 @@
 import { getSession } from "next-auth/client";
 import React, { useState, useEffect } from "react";
-import { get, useForm } from "react-hook-form";
+import { get, set, useForm } from "react-hook-form";
 
 import ProductForm from "../../../components/ProductForm/productForm";
 import { AdminAuth } from "../../../components/AdminAuth";
 
 function Product() {
+  useEffect(() => {
+    getCategory();
+  }, []);
 
-useEffect(() => {
-getCategory();
-    
-}, [])
-
-
-const [categories, setCategories] = useState([])
-const [response, setResponse] = useState({});
-
-
-
-
+  const [categories, setCategories] = useState([]);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState();
 
   const user = AdminAuth();
-
-
 
   const getCategory = () => {
     return fetch("/api/category", {
@@ -30,8 +22,9 @@ const [response, setResponse] = useState({});
     })
       .then((response) => response.json())
       .then((data) => {
-        setCategories(data.result)
-      }).catch(err=> setMessage(err))
+        setCategories(data.result);
+      })
+      .catch((err) => setMessage(err));
   };
 
   const {
@@ -42,7 +35,6 @@ const [response, setResponse] = useState({});
   } = useForm();
 
   const onSubmit = (data) => {
-
     const newData = {
       id: user._id,
       role: user.role,
@@ -57,19 +49,12 @@ const [response, setResponse] = useState({});
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data) {
-          if (data.success === false) {
-            setError(true);
-          } else if (response.success === true) {
-            setSuccess(true)
-          } else {
-            console.log("none");
-          }
-        }
-      });
-    reset();
+        setSuccess(data.message);
+        setError(data.error);
+      })
+      .catch((err) => setError(err));
+      reset();
   };
-
 
   const handleChange = (e) => {
     const name = e.target.value;
@@ -87,7 +72,8 @@ const [response, setResponse] = useState({});
         handleSubmit={handleSubmit}
         errors={errors}
         categories={categories}
-        response={response}
+        error={error}
+        success={success}
       />
     </>
   );

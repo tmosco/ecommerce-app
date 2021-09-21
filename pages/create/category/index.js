@@ -8,7 +8,7 @@ import Link from "next/link";
 function Category() {
   const [user, setUser] = useState();
   const [error, setError] = useState("");
-  const [success, setSucces] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     const securePage = async () => {
@@ -43,7 +43,7 @@ function Category() {
       .then((response) => response.json())
       .then((data) => {
         // console.log(data.message);
-        setSucces(data.message);
+        setSuccess(data.message);
         setError(data.error);
       })
       .catch((err) => setError(err));

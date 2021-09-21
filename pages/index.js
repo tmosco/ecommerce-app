@@ -1,10 +1,10 @@
 import styles from "../styles/Home.module.css";
-// import Header from "../components/header";
+import Header from "../components/Header";
 
 function HomePage() {
   return (
     <>
-    <h2>This is the homepage</h2>
+    <Header title ="Super C Pharmacy" description="By your medicine"/>
 
 
 </>

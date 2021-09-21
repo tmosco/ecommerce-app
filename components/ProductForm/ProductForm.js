@@ -1,6 +1,5 @@
 import FormHeader from "../FormHeader";
-import { useState } from 'react';
-
+import { useState } from "react";
 
 import Link from "next/link";
 
@@ -11,27 +10,10 @@ function ProductForm({
   handleSubmit,
   errors,
   categories,
-  response,
+  success,
+  error,
 }) {
-const [error, setError] = useState(false);
-const [success, setSuccess] = useState(false);
 
-console.log("error",error);
-console.log("success",success);
-
-
-  const checkError = (response) => {
-    if (response) {
-      if (response.success === false) {
-        setError(true);
-      } else if (response.success === true) {
-        setSuccess(true)
-      } else {
-        console.log("none");
-      }
-    }
-  };
-checkError(response);
   const newPhotoForm = () => (
     <form action="" className="mb-3">
       <h4>Photo</h4>
@@ -51,23 +33,21 @@ checkError(response);
     </div>
   );
 
-  const showSuccess = () => (
-    <div className="alert alert-info">
-      <h2>Product Created</h2> !
-    </div>
+  const showSuccess = (success) => (
+    <div className="alert alert-info">{success}</div>
   );
 
-  const showError = (response) => (
-    <div className="alert alert-danger">{response.message}</div>
+  const showError = (error) => (
+    <div className="alert alert-danger">{error}</div>
   );
+
   return (
     <>
       <FormHeader title="Add new Product" />
       {goBack()}
       <div className={`container col-md-8 offset-md-2 `}>
-        {success && showSuccess()}
-        {error &&  showError(response)} 
-
+        {success && showSuccess(success)}
+        {error && showError(error)}
 
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -141,7 +121,7 @@ checkError(response);
               <option>Please Select</option>
               {categories &&
                 categories.map((c, i) => (
-                  <option value={c._id}>{c.name}</option>
+                  <option value={c._id}>{c.categoryName}</option>
                 ))}
             </select>
 
